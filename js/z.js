@@ -69,10 +69,49 @@ box-bgColor:弹出框背景色
 		color:'#666',
 		backgroundColor:'#ccc',
 		padding:'10px 10px'
-	}
+	};
 	setStyle(z,zStyle);
 	z.innerHTML='z tanchu kuang';
 	box.appendChild(z);
+
+	var footer=d.createElement('div');
+	var footerStyle={
+		padding:'10px 5px',
+		backgroundColor:'#fff',
+		color:'#fff',
+		fontSize:'16px',
+		position:'relative'
+	};
+	var btnSure=d.createElement('span');
+	var btnStyle={
+		display:'block',
+		width:'40px',
+		padding:'5px 10px',
+		position:'absolute',
+		color:'#000',
+		backgroundColor:'#ccc',
+		textAlign:'center'
+	};
+	var btnCancel=d.createElement('span');
+	var btnCancelStyle={
+		right:'10px',
+		top:'0px'
+	};
+	var btnSureStyle={
+		left:'10px',
+		top:'0px'
+	};
+	setStyle(footer,footerStyle);
+	setStyle(btnSure,btnStyle);
+	setStyle(btnSure,btnSureStyle);
+	setStyle(btnCancel,btnStyle);
+	setStyle(btnCancel,btnCancelStyle);
+	
+	btnSure.innerHTML='确定';
+	btnCancel.innerHTML='取消';
+	footer.appendChild(btnSure);
+	footer.appendChild(btnCancel);
+	box.appendChild(footer);
 
 	d.querySelectorAll('body')[0].appendChild(cover);
 }(window));
