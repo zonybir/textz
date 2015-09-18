@@ -1,7 +1,31 @@
-# textz
-just for
-·´ÕıÎÒÊÇ¾«Æ£Á¦¾¡µÄÖÕÓÚËãÊÇ°ÑgitÅªÍ¨ÁË(¡Ñ©n¡Ñ)bØ¼
- ÓÀÔ¶¶¼ÊÇPermission denied (publickey).¿ìÒª±ÀÀ£
-È»ºó°Ñ .sshÎÄ¼ş¼ĞÉ¾ÁË¶¼ºÃÁË ~  ÎÒÒ²ÊÇ×íÁË  ²» ÎÒÊÇÔç¶¼×íÁË
+git ä½¿ç”¨æµç¨‹ 
 
-bye ~ 
+ssh-keygen -t rsa -C zonybir@icloud.com
+		å°†ç”Ÿæˆå¾—å¯†åŒ™ åŠ è½½è¿› githubé‡Œé¢
+
+git init //åˆå§‹åŒ–æœ¬åœ°ä»“åº“
+
+git config user.name 
+ 						user.email
+
+git config github.name
+ 						github.token XXXXXXX
+ 						XXXXXXç ç”±githubä¸Šç”Ÿæˆ é¡ºåº  settings ---->  Personal access tokens  ---->  Generate new token  // OVER
+
+ 				
+
+æœ¬åœ°ä»“åº“ä¸githubä¸Šä»“åº“å…³è”  
+
+	git remote add origin git@server-name:path/repo-name.gitï¼›  //githubé¡¹ç›®çš„åœ°å€
+
+git pull XXXXXX   æ‹‰ä¸‹githubé¡¹ç›®åˆ°æœ¬åœ°
+		
+
+
+
+git merge åˆ†æ”¯X    æŠŠåˆ†æ”¯XåŠ è½½åˆ° å½“å‰åˆ†æ”¯é‡Œé¢
+
+git push origin master    æŠŠmasteråˆ†æ”¯æäº¤åˆ°githubä¸Š 
+
+
+	åç»­çš„git pull è®¾ç½®é»˜è®¤ pull  origin åˆ†æ”¯ä¸­å¾—master   git pull git branch --set-upstream-to=origin/master 
