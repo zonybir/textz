@@ -68,10 +68,16 @@ box-bgColor:弹出框背景色
 		textAlign:'left',
 		color:'#666',
 		backgroundColor:'#fff',
-		padding:'10px 15px'
+		padding:'10px 15px',
+		maxHeight:'221px',
+		overflow:'auto'
 	};
 	setStyle(z,zStyle);
-	z.innerHTML='我爱你，爱了整整一个曾经。再见！';
+	var str='我爱你，爱了整整一个曾经。再见！'
+	for (var i=0;i<5;i++){
+		str+=str;
+	}
+	z.innerHTML=str;
 	box.appendChild(z);
 
 	var footer=d.createElement('div');
@@ -126,5 +132,31 @@ box-bgColor:弹出框背景色
 		if(target.addEventListener) target.addEventListener(type,handler,false);
 		else if (target.attachEvent) target.attachEvent('on'+type,function(evet){return handler.call(target,event);})
 		else {z.innerHTML='浏览器版本过低，请升级你的浏览器方可正常使用。谢谢！';}
-	}	
+	}
+
+	function close(){
+		cover.parentNode.removeChild(cover);
+	}
+
+	addEvent(btnSure,'click',function(){
+		close();
+		return true;
+	});
+	addEvent(btnCancel,'click',function(){
+		close();
+		return false;
+	});	
+	window.zDialog=function(str,options){
+		if(typeof str !== 'string'){
+			throw new Error("typeError:understard the type of '"+ typeof str +"' in zDialog('type str,type object');");
+		}else{
+			var obj=document.querySelectorAll(str);
+			if (typeof options !== 'underfind')	for(var i=0,len=obj.length;i<len;i++) addEvent(obj[i],'click',function(){show(options)});
+			else throw new Error("typeError:understard the type of '"+ typeof options +"' in zDialog('type str,type object');");
+		}
+	}
 }(window));
+var a='312';
+//zDialog(a);
+var av={x:1,b:{3:3}};
+console.log(typeof av);
