@@ -51,10 +51,10 @@ box-bgColor:弹出框背景色
 
 	var title=d.createElement('div');
 	var titleStyle={
-			fontSize:'18px',
-			color:'#CCC',
+			fontSize:'16px',
+			color:'#333',
 			borderBottom:'1px solid #ccc',
-			backgroundColor:'#eee',
+			backgroundColor:'#8593B7',
 			textAlign:'center',
 			padding:'5px 10px'
 	}
@@ -64,42 +64,47 @@ box-bgColor:弹出框背景色
 
 	var z=d.createElement('div');
 	var zStyle={
-		fontSize:'16px',
+		fontSize:'14px',
 		textAlign:'left',
 		color:'#666',
-		backgroundColor:'#ccc',
-		padding:'10px 10px'
+		backgroundColor:'#fff',
+		padding:'10px 15px'
 	};
 	setStyle(z,zStyle);
-	z.innerHTML='z tanchu kuang';
+	z.innerHTML='我爱你，爱了整整一个曾经。再见！';
 	box.appendChild(z);
 
 	var footer=d.createElement('div');
 	var footerStyle={
-		padding:'10px 5px',
-		backgroundColor:'#fff',
-		color:'#fff',
+		padding:'5px 5px',
+		backgroundColor:'#D2D2D2',
+		color:'#333',
 		fontSize:'16px',
-		position:'relative'
+		//position:'relative'
+		textAlign:'right'
 	};
 	var btnSure=d.createElement('span');
 	var btnStyle={
-		display:'block',
+		//display:'block',
 		width:'40px',
-		padding:'5px 10px',
-		position:'absolute',
-		color:'#000',
-		backgroundColor:'#ccc',
-		textAlign:'center'
+		padding:'2px 10px',
+		//position:'absolute',
+		color:'#fff',
+		backgroundColor:'#8593B7',
+		textAlign:'center',
+		cursor:'pointer',
+		fontSize:'14px',
+		borderRadius:'5px',
+
 	};
 	var btnCancel=d.createElement('span');
 	var btnCancelStyle={
-		right:'10px',
-		top:'0px'
+		//'float':'right',
+		marginRight:'10px'
+
 	};
 	var btnSureStyle={
-		left:'10px',
-		top:'0px'
+		marginRight:'5px'
 	};
 	setStyle(footer,footerStyle);
 	setStyle(btnSure,btnStyle);
@@ -109,9 +114,19 @@ box-bgColor:弹出框背景色
 	
 	btnSure.innerHTML='确定';
 	btnCancel.innerHTML='取消';
-	footer.appendChild(btnSure);
+	
+	
 	footer.appendChild(btnCancel);
+	footer.appendChild(btnSure);
 	box.appendChild(footer);
 
 	d.querySelectorAll('body')[0].appendChild(cover);
+	btnSure.addEventListener('click',function(){
+		alert('sure');
+	},false);
+	function addEvent(target,type,handler){
+		if(target.addEventListener) target.addEventListener(type,handler,false);
+		else if (target.attachEvent) target.attachEvent('on'+type,function(evet){return handler.call(target,event);})
+		else {z.innerHTML='浏览器版本过低，请升级你的浏览器方可正常使用。谢谢！';}
+	}	
 }(window));
