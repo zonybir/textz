@@ -78,3 +78,11 @@ git push origin master    把master分支提交到github上
 
 
 	后续的git pull 设置默认 pull  origin 分支中得master   git pull git branch --set-upstream-to=origin/master 
+
+
+
+
+git 版本回退 
+
+  git reflog 查看本地操作日志  
+  git reset --hard HEAD@{N}   本地commit 退回到指定N的位置.
