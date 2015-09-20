@@ -121,9 +121,7 @@ box-bgColor:弹出框背景色
 	box.appendChild(footer);
 
 	d.querySelectorAll('body')[0].appendChild(cover);
-	btnSure.addEventListener('click',function(){
-		alert('sure');
-	},false);
+	
 	function addEvent(target,type,handler){
 		if(target.addEventListener) target.addEventListener(type,handler,false);
 		else if (target.attachEvent) target.attachEvent('on'+type,function(evet){return handler.call(target,event);})
