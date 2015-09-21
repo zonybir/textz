@@ -159,9 +159,10 @@ box-bgColor:弹出框背景色
 	})
 	addEvent(box,'click',function(e){stop(e);});
 
-	function main(){return false;}
+	var i=0;	
 	function show(options){
-		
+		console.log(i);
+		i++;
 	}
 	show.prototype={
 
@@ -171,7 +172,7 @@ box-bgColor:弹出框背景色
 			throw new Error("typeError:understard the type of '"+ typeof str +"' in zDialog('type str,type object');");
 		}else{
 			var obj=document.querySelectorAll(str);
-			if (typeof options !== 'underfind') for(var i=0,len=obj.length;i<len;i++) addEvent(obj[i],'click',function(){show(options)});
+			if (typeof options !== 'underfind') for(var i=0,len=obj.length;i<len;i++) addEvent(obj[i],'click',function(){show(options);});
 			else throw new Error("typeError:understard the type of '"+ typeof options +"' in zDialog('type str,type object');");
 		}
 	};
@@ -185,6 +186,12 @@ box-bgColor:弹出框背景色
 	window.$z=zDialog;
 }(window));
 var a='312';
-console.log($z('body',{width:123,color:'red'}));
+//console.log($z('body',{width:123,color:'red'}));
 var av={x:1,b:{3:3}};
 console.log(typeof av);
+window.onload=function(){
+	$z('.text1',{
+		title:'警告！',
+		z:'请不要再觉得她狠可爱。'
+	})
+}
