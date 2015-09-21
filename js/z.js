@@ -52,14 +52,14 @@ box-bgColor:弹出框背景色
 	var title=d.createElement('div');
 	var titleStyle={
 			fontSize:'16px',
-			color:'#333',
+			color:'#fff',
 			borderBottom:'1px solid #ccc',
 			backgroundColor:'#8593B7',
 			textAlign:'center',
 			padding:'5px 10px'
 	}
 	setStyle(title,titleStyle);
-	title.innerHTML='Title';
+	title.innerHTML='提示';
 	box.appendChild(title);
 
 	var z=d.createElement('div');
@@ -73,10 +73,10 @@ box-bgColor:弹出框背景色
 		overflow:'auto'
 	};
 	setStyle(z,zStyle);
-	var str='我爱你，爱了整整一个曾经。再见！'
-	for (var i=0;i<5;i++){
+	var str='我多想回到家乡，再回到她的身旁。让她的温柔善良，来抚慰我的心伤。'
+	/*for (var i=0;i<5;i++){
 		str+=str;
-	}
+	}*/
 	z.innerHTML=str;
 	box.appendChild(z);
 
@@ -133,9 +133,17 @@ box-bgColor:弹出框背景色
 		else if (target.attachEvent) target.attachEvent('on'+type,function(evet){return handler.call(target,event);})
 		else {z.innerHTML='浏览器版本过低，请升级你的浏览器方可正常使用。谢谢！';}
 	}
-
+	function  hasPrototype(obj){
+		if(typeof obj !== 'underfind') return true;
+		else return false;
+	}
 	function close(){
 		cover.parentNode.removeChild(cover);
+	}
+	function stop(event){
+		var e=event || window.event;
+		if (e.stopPropagation) e.stopPropagation();
+		else if(window.event) window.event.cancelBubble = true;
 	}
 
 	addEvent(btnSure,'click',function(){
@@ -145,18 +153,38 @@ box-bgColor:弹出框背景色
 	addEvent(btnCancel,'click',function(){
 		close();
 		return false;
-	});	
-	window.zDialog=function(str,options){
+	});
+	addEvent(cover,'click',function(){
+		close();
+	})
+	addEvent(box,'click',function(e){stop(e);});
+
+	function main(){return false;}
+	function show(options){
+		
+	}
+	show.prototype={
+
+	}	
+	function zDialog(str,options){
 		if(typeof str !== 'string'){
 			throw new Error("typeError:understard the type of '"+ typeof str +"' in zDialog('type str,type object');");
 		}else{
 			var obj=document.querySelectorAll(str);
-			if (typeof options !== 'underfind')	for(var i=0,len=obj.length;i<len;i++) addEvent(obj[i],'click',function(){show(options)});
+			if (typeof options !== 'underfind') for(var i=0,len=obj.length;i<len;i++) addEvent(obj[i],'click',function(){show(options)});
 			else throw new Error("typeError:understard the type of '"+ typeof options +"' in zDialog('type str,type object');");
 		}
+	};
+	zDialog.prototype.initStyle=function(options){
+		if (hasPrototype(options.coverStyle)) setStyle(cover,options.coverStyle);
+		if (hasPrototype(options.boxStyle)) setStyle(box,options.boxStyle);
+		if (hasPrototype(options.titleStyle)) setStyle(title,options.titleStyle);
+		if (hasPrototype(options.zStyle)) setStyle(z,options.zStyle);
+		if (hasPrototype(options.footerStyle)) setStyle(footer,options.footerStyle);
 	}
+	window.$z=zDialog;
 }(window));
 var a='312';
-//zDialog(a);
+console.log($z('body',{width:123,color:'red'}));
 var av={x:1,b:{3:3}};
 console.log(typeof av);
