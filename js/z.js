@@ -87,41 +87,10 @@ box-bgColor:弹出框背景色
 	};
 
 	function setStyle(ele,style){
-			for (var i in style){
-				ele.style[i]=style[i];
-			}
+		for (var i in style){
+			ele.style[i]=style[i];
+		}
 	}
-
-	
-	cover.appendChild(box);
-
-
-	
-	title.innerHTML='提示';
-	box.appendChild(title);
-
-	
-	
-	var str='确认同意协议，继续下一步操作？';
-	/*for (var i=0;i<5;i++){
-		str+=str;
-	}*/
-	z.innerHTML=str;
-	box.appendChild(z);
-
-	
-
-	
-	
-	btnSure.innerHTML='确定';
-	btnCancel.innerHTML='取消';
-	
-	
-	footer.appendChild(btnCancel);
-	footer.appendChild(btnSure);
-	box.appendChild(footer);
-
-	d.querySelectorAll('body')[0].appendChild(cover);
 	
 	function addEvent(target,type,handler){
 		if(target.addEventListener) target.addEventListener(type,handler,false);
@@ -132,36 +101,21 @@ box-bgColor:弹出框背景色
 		if(typeof obj !== 'underfind') return true;
 		else return false;
 	}
-	function close(){
-		cover.parentNode.removeChild(cover);
-	}
+	function close(){cover.parentNode.removeChild(cover);}
 	function stop(event){
 		var e=event || window.event;
 		if (e.stopPropagation) e.stopPropagation();
 		else if(window.event) window.event.cancelBubble = true;
 	}
 
-	addEvent(btnSure,'click',function(){
-		close();
-		return true;
-	});
-	addEvent(btnCancel,'click',function(){
-		close();
-		return false;
-	});
-	addEvent(cover,'click',function(){
-		close();
-	})
-	addEvent(box,'click',function(e){stop(e);});
+	
 
 	var i=0;	
 	function show(options){
 		console.log(i);
 		i++;
 	}
-	show.prototype={
-
-	}	
+		
 	function zDialog(str,options){
 		if(typeof str !== 'string'){
 			throw new Error("typeError:understard the type of '"+ typeof str +"' in zDialog('type str,type object');");
@@ -179,8 +133,22 @@ box-bgColor:弹出框背景色
 		if (hasPrototype(options.footerStyle)) for(var i in options.footerStyle) dialog.footerStyle[i]=options.footerStyle[i];
 		if(hasPrototype(options.btnSureStyle)) for(var i in options.btnSureStyle) dialog.btnSureStyle[i]=options.btnSureStyle[i];
 		if(hasPrototype(options.btnCancelStyle)) for(var i in options.btnCancelStyle) dialog.btnCancelStyle[i]=options.btnCancelStyle[i];
+	};
+	function inserText(){
+		title.innerHTML='提示';
+		z.innerHTML="确认同意协议，继续下一步操作？";
+		btnSure.innerHTML='确定';
+		btnCancel.innerHTML='取消';
 	}
-	
+	function inserNode(){
+		cover.appendChild(box);		
+		box.appendChild(title);		
+		box.appendChild(z);		
+		footer.appendChild(btnCancel);
+		footer.appendChild(btnSure);
+		box.appendChild(footer);
+		d.querySelectorAll('body')[0].appendChild(cover);
+	}
 	function overallStyle(){
 		setStyle(cover,dialog.coverStyle);
 		setStyle(box,dialog.boxStyle);
@@ -194,6 +162,12 @@ box-bgColor:弹出框背景色
 			console.log(i);
 		}
 	}
+	function addEventList(){
+		addEvent(btnSure,'click',function(){close();});
+		addEvent(btnCancel,'click',function(){close();});
+		addEvent(cover,'click',function(){close();})
+		addEvent(box,'click',function(e){stop(e);});
+	}
 	window.$z=function(str,options){
 		return new zDialog(str,options);
 	};
@@ -203,24 +177,6 @@ box-bgColor:弹出框背景色
 	$z.init=$z.prototype.init;
 	$z.s=dialog;
 }(window));
-var a='312';
-//console.log($z('body',{width:123,color:'red'}));
-var av={x:1,b:{3:3}};
-console.log(typeof av);
-console.log($z)
-$z.init({
-	coverStyle:{
-		backgroundColor:'red'	
-	}
-})
 window.onload=function(){
-	$z('.text1',{
-		title:'警告！',
-		z:'请不要再觉得她狠可爱。'
-	});
-	var i=4,b=i;
-	b=5;
-	console.log(i);
-
-
+	
 }
