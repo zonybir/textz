@@ -16,12 +16,12 @@ box-bgColor:弹出框背景色
 (function(window){
 	var d=document,
 	cover=d.createElement('div'),
-	box=cover.cloneNode(true),
-	title=cover.cloneNode(true),
-	z=cover.cloneNode(true),
-	footer=cover.cloneNode(true),
-	btnSure=d.createElement('span'),
-	btnCancel=btnSure.cloneNode(true),
+	 box=cover.cloneNode(true),
+	 title=cover.cloneNode(true),
+	 z=cover.cloneNode(true),
+	 footer=cover.cloneNode(true),
+	 btnSure=d.createElement('span'),
+	 btnCancel=btnSure.cloneNode(true),
 	dialog={
 		coverStyle:{
 		 	position:'fixed',
@@ -36,7 +36,8 @@ box-bgColor:弹出框背景色
 			backgroundColor:'#fff',
 			margin:'0 auto',
 			top:'10%',
-			position:'relative'
+			position:'relative',
+			minWidth:'220px'
 			},
 		titleStyle:{
 			fontSize:'16px',
@@ -101,27 +102,32 @@ box-bgColor:弹出框背景色
 		if(typeof obj !== 'underfind') return true;
 		else return false;
 	}
-	function close(){cover.parentNode.removeChild(cover);}
+	var a=0;
+	function close(){cover.parentNode.removeChild(cover);removeEvent();console.log(a);a++;}
 	function stop(event){
 		var e=event || window.event;
 		if (e.stopPropagation) e.stopPropagation();
 		else if(window.event) window.event.cancelBubble = true;
 	}
 
-	
-
 	var i=0;	
 	function show(options){
-		console.log(i);
-		i++;
+	                
+		 inserText();
+		 overallStyle();
+		 inserNode();
+		 addEventList();
+
 	}
-		
+	function clickhandler(){
+		new show();
+	}	
 	function zDialog(str,options){
 		if(typeof str !== 'string'){
 			throw new Error("typeError:understard the type of '"+ typeof str +"' in zDialog('type str,type object');");
 		}else{
 			var obj=document.querySelectorAll(str);
-			if (typeof options !== 'underfind') for(var i=0,len=obj.length;i<len;i++) addEvent(obj[i],'click',function(){show(options);});
+			if (typeof options !== 'underfind') for(var i=0,len=obj.length;i<len;i++) addEvent(obj[i],'click',clickhandler);	
 			else throw new Error("typeError:understard the type of '"+ typeof options +"' in zDialog('type str,type object');");
 		}
 	};
@@ -133,7 +139,9 @@ box-bgColor:弹出框背景色
 		if (hasPrototype(options.footerStyle)) for(var i in options.footerStyle) dialog.footerStyle[i]=options.footerStyle[i];
 		if(hasPrototype(options.btnSureStyle)) for(var i in options.btnSureStyle) dialog.btnSureStyle[i]=options.btnSureStyle[i];
 		if(hasPrototype(options.btnCancelStyle)) for(var i in options.btnCancelStyle) dialog.btnCancelStyle[i]=options.btnCancelStyle[i];
+		return this;
 	};
+	zDialog.init=zDialog.prototype.initStyle;
 	function inserText(){
 		title.innerHTML='提示';
 		z.innerHTML="确认同意协议，继续下一步操作？";
@@ -157,26 +165,31 @@ box-bgColor:弹出框背景色
 		setStyle(footer,dialog.footerStyle);
 		setStyle(btnSure,dialog.btnSureStyle);
 		setStyle(btnCancel,dialog.btnCancelStyle);
-		for (var i in dialog) {
-			i=i.substring(0,-6);
-			console.log(i);
-		}
 	}
 	function addEventList(){
 		addEvent(btnSure,'click',function(){close();});
 		addEvent(btnCancel,'click',function(){close();});
 		addEvent(cover,'click',function(){close();})
 		addEvent(box,'click',function(e){stop(e);});
+		document.removeEventListener('click',cover,false);
 	}
-	window.$z=function(str,options){
-		return new zDialog(str,options);
-	};
-	$z.prototype.init=function(options){
-		zDialog.prototype.initStyle(options);
+	function removeEvent(){
+		document.removeEventListener('click',clickhandler,false);
+		document.removeEventListener('click',btnCancel,false);
+		
+		document.removeEventListener('click',box,false);
 	}
-	$z.init=$z.prototype.init;
-	$z.s=dialog;
+	window.$z= zDialog;
 }(window));
 window.onload=function(){
-	
+	$z.init({
+		boxStyle:{
+			backgroundColor:'red',
+			width:'100px'
+		},
+		coverStyle:{
+			fontSize:'18px'
+		}
+	})('.text1',{z:'shishishishi'});
+	$z('.text2',{z:'fefefefefwefwfwfewfwefwefwfe'});
 }
