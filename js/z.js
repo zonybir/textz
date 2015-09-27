@@ -2,26 +2,18 @@
 
 position:  left   top  right bottom center  {left:X,top:X}
 fixed:true  false 默认true
-t: 若有此属性  带标题 
-tColor:  带标题 此属性生效  标题颜色
-tfSize:标题字体大小
+t: 若有此属性且值为false  则不带标题 此时tStyle属性无效
+tStyle:无t属性或者t属性为true 时 生效   设置标题样式 eg  tStyle{coloe:red,fontSize:'18px',backgroundColor:#fff}
 z:弹框内容
-zColor:弹框字体颜色
-zfSize:弹框内容字体大小
 type: 1 带确认按钮 （重要性提示） 2 无确认按钮 空白点击隐藏（不重要提示性用）  3带确定与取消 返回true false(用户选择性用) 
 border:'1px solid #ccc' 弹出框的边框
 box-show:弹出框的阴影
 box-bgColor:弹出框背景色
+btnSureText:弹出框 确定按钮文字
 */
 (function(window){
 	var d=document,
 	cover=d.createElement('div'),
-	 box=cover.cloneNode(true),
-	 title=cover.cloneNode(true),
-	 z=cover.cloneNode(true),
-	 footer=cover.cloneNode(true),
-	 btnSure=d.createElement('span'),
-	 btnCancel=btnSure.cloneNode(true),
 	dialog={
 		coverStyle:{
 		 	position:'fixed',
@@ -85,14 +77,7 @@ box-bgColor:弹出框背景色
 			borderRadius:'5px',
 			marginRight:'5px'
 			}
-	};
-
-	function setStyle(ele,style){
-		for (var i in style){
-			ele.style[i]=style[i];
-		}
-	}
-	
+	};	
 	function addEvent(target,type,handler){
 		if(target.addEventListener) target.addEventListener(type,handler,false);
 		else if (target.attachEvent) target.attachEvent('on'+type,function(evet){return handler.call(target,event);})
@@ -102,32 +87,74 @@ box-bgColor:弹出框背景色
 		if(typeof obj !== 'underfind') return true;
 		else return false;
 	}
-	var a=0;
-	function close(){cover.parentNode.removeChild(cover);removeEvent();console.log(a);a++;}
+	function close(){cover.parentNode.removeChild(cover);removeEvent();}
 	function stop(event){
 		var e=event || window.event;
 		if (e.stopPropagation) e.stopPropagation();
 		else if(window.event) window.event.cancelBubble = true;
 	}
 
-	var i=0;	
 	function show(options){
-	                
-		 inserText();
-		 overallStyle();
-		 inserNode();
-		 addEventList();
-
-	}
-	function clickhandler(){
-		new show();
+		this.options=options;
+		this.show();		 
+	};
+	show.prototype={
+		cloneAndApeendNode:function(){
+			this.box=cover.cloneNode(true),
+			this.title=cover.cloneNode(true),
+			this.z=cover.cloneNode(true),
+			this.footer=cover.cloneNode(true),
+			this.btnSure=d.createElement('span'),
+			this.btnCancel=this.btnSure.cloneNode(true),
+			this.box.appendChild(this.title);
+			this.box.appendChild(this.z);
+			this.box.appendChild(this.footer);
+		},
+		setT:function(){
+			var _t=this;
+			if (_t.options.t == false || _t.options.t == 'false'){
+				_t.title.parentNode.removeChild(_t.title);
+			}else if( typeof _t.options.tStyle === 'object') _t.setStyle(_t.t,_t.options.tStyle);
+		},
+		setBtn:function(){
+			if (typeof this.options.type !== 'underfind'){
+				switch (this.options.type){
+					case 0:{
+						this.footer.parentNode.removeChild(this.footer);
+						break;
+					}
+					case 1:{
+						this.footer.appendChild(this.btnSure);
+						if(this.options.btnSureText) this.btnSure.innerHTML=this.options.btnSureText;
+						break;
+					}
+					case 2:{
+						this.footer.appendChild(this.btnCancel);
+						if(this.options.btnCancelText) this.btnCancel.innerHTML=this.options.btnCancelText;
+						this.footer.appendChild(this.btnSure);
+						if(this.options.btnSureText) this.btnSure.innerHTML=this.options.btnSureText;
+						break;
+					}
+					default:
+						break;
+				}
+			}
+		},
+		setStyle:function(ele,obj){for(var i in obj)ele.style[i]=obj[i];},
+		show:function(){
+			this.cloneAndApeendNode();
+			this.setT();
+			this.setBtn();
+			cover.appendChild(this.box);
+			d.querySelectorAll('body')[0].appendChild(cover);
+		}
 	}	
 	function zDialog(str,options){
 		if(typeof str !== 'string'){
 			throw new Error("typeError:understard the type of '"+ typeof str +"' in zDialog('type str,type object');");
 		}else{
 			var obj=document.querySelectorAll(str);
-			if (typeof options !== 'underfind') for(var i=0,len=obj.length;i<len;i++) addEvent(obj[i],'click',clickhandler);	
+			if (typeof options !== 'underfind') for(var i=0,len=obj.length;i<len;i++) addEvent(obj[i],'click',function(){new show(options);});	
 			else throw new Error("typeError:understard the type of '"+ typeof options +"' in zDialog('type str,type object');");
 		}
 	};
@@ -142,30 +169,7 @@ box-bgColor:弹出框背景色
 		return this;
 	};
 	zDialog.init=zDialog.prototype.initStyle;
-	function inserText(){
-		title.innerHTML='提示';
-		z.innerHTML="确认同意协议，继续下一步操作？";
-		btnSure.innerHTML='确定';
-		btnCancel.innerHTML='取消';
-	}
-	function inserNode(){
-		cover.appendChild(box);		
-		box.appendChild(title);		
-		box.appendChild(z);		
-		footer.appendChild(btnCancel);
-		footer.appendChild(btnSure);
-		box.appendChild(footer);
-		d.querySelectorAll('body')[0].appendChild(cover);
-	}
-	function overallStyle(){
-		setStyle(cover,dialog.coverStyle);
-		setStyle(box,dialog.boxStyle);
-		setStyle(title,dialog.titleStyle);
-		setStyle(z,dialog.zStyle);
-		setStyle(footer,dialog.footerStyle);
-		setStyle(btnSure,dialog.btnSureStyle);
-		setStyle(btnCancel,dialog.btnCancelStyle);
-	}
+
 	function addEventList(){
 		addEvent(btnSure,'click',function(){close();});
 		addEvent(btnCancel,'click',function(){close();});
@@ -182,7 +186,7 @@ box-bgColor:弹出框背景色
 	window.$z= zDialog;
 }(window));
 window.onload=function(){
-	$z.init({
+/*	$z.init({
 		boxStyle:{
 			backgroundColor:'red',
 			width:'100px'
@@ -190,6 +194,6 @@ window.onload=function(){
 		coverStyle:{
 			fontSize:'18px'
 		}
-	})('.text1',{z:'shishishishi'});
+	})('.text1',{z:'shishishishi'});*/
 	$z('.text2',{z:'fefefefefwefwfwfewfwefwefwfe'});
 }
