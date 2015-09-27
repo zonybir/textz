@@ -140,16 +140,30 @@ btnSureText:弹出框 确定按钮文字
 				}
 			}
 		},
+		overallStyle:function(){
+			var _t=this;
+			_t.setStyle(cover,dialog.coverStyle);
+			_t.setStyle(this.box,dialog.boxStyle);
+			_t.setStyle(this.title,dialog.titleStyle);
+			_t.setStyle(this.z,dialog.zStyle);
+			_t.setStyle(this.footer,dialog.footerStyle);
+			_t.setStyle(this.btnSure,dialog.btnSureStyle);
+			_t.setStyle(this.btnCancel,dialog.btnCancelStyle);
+		},
 		setStyle:function(ele,obj){for(var i in obj)ele.style[i]=obj[i];},
 		show:function(){
 			this.cloneAndApeendNode();
 			this.setT();
 			this.setBtn();
+			this.overallStyle();
 			cover.appendChild(this.box);
 			d.querySelectorAll('body')[0].appendChild(cover);
 		}
 	}	
 	function zDialog(str,options){
+		zDialog.prototype.start(str,options);
+	};
+	zDialog.prototype.start=function(str,options){
 		if(typeof str !== 'string'){
 			throw new Error("typeError:understard the type of '"+ typeof str +"' in zDialog('type str,type object');");
 		}else{
@@ -157,7 +171,7 @@ btnSureText:弹出框 确定按钮文字
 			if (typeof options !== 'underfind') for(var i=0,len=obj.length;i<len;i++) addEvent(obj[i],'click',function(){new show(options);});	
 			else throw new Error("typeError:understard the type of '"+ typeof options +"' in zDialog('type str,type object');");
 		}
-	};
+	}
 	zDialog.prototype.initStyle=function(options){
 		if (hasPrototype(options.coverStyle)) for(var i in options.coverStyle) dialog.coverStyle[i]=options.coverStyle[i];
 		if (hasPrototype(options.boxStyle)) for(var i in options.boxStyle) dialog.boxStyle[i]=options.boxStyle[i];
@@ -169,7 +183,7 @@ btnSureText:弹出框 确定按钮文字
 		return this;
 	};
 	zDialog.init=zDialog.prototype.initStyle;
-
+	zDialog.start=zDialog.prototype.start;
 	function addEventList(){
 		addEvent(btnSure,'click',function(){close();});
 		addEvent(btnCancel,'click',function(){close();});
@@ -183,10 +197,19 @@ btnSureText:弹出框 确定按钮文字
 		
 		document.removeEventListener('click',box,false);
 	}
-	window.$z= zDialog;
+	function overallStyle(){
+		setStyle(cover,dialog.coverStyle);
+		setStyle(box,dialog.boxStyle);
+		setStyle(title,dialog.titleStyle);
+		setStyle(z,dialog.zStyle);
+		setStyle(footer,dialog.footerStyle);
+		setStyle(btnSure,dialog.btnSureStyle);
+		setStyle(btnCancel,dialog.btnCancelStyle);
+	}
+	window.$z=zDialog;
 }(window));
 window.onload=function(){
-/*	$z.init({
+	$z.init({
 		boxStyle:{
 			backgroundColor:'red',
 			width:'100px'
@@ -194,6 +217,6 @@ window.onload=function(){
 		coverStyle:{
 			fontSize:'18px'
 		}
-	})('.text1',{z:'shishishishi'});*/
-	$z('.text2',{z:'fefefefefwefwfwfewfwefwefwfe'});
+	}).start('.text1',{z:'shishishishi'});
+	//$z('.text2',{z:'fefefefefwefwfwfewfwefwefwfe'});
 }
