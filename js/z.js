@@ -126,7 +126,7 @@ btnCancelText:取消按钮文字	         type取值  2  时生效
 		},
 		setBtn:function(){
 			var _t=this;
-			if (typeof _t.options.type !== 'underfind'){
+			if (typeof _t.options.type !== 'undefined'){
 				switch (_t.options.type){
 					case 0:{
 						_t.footer.parentNode.removeChild(_t.footer);
@@ -215,7 +215,7 @@ btnCancelText:取消按钮文字	         type取值  2  时生效
 			throw new Error("typeError:understard the type of '"+ typeof str +"' in zDialog('type str,type object');");
 		}else{
 			var obj=document.querySelectorAll(str);
-			if (typeof options !== 'underfind') for(var i=0,len=obj.length;i<len;i++) addEvent(obj[i],'click',function(){new show(options);});	
+			if (typeof options !== 'undefined') for(var i=0,len=obj.length;i<len;i++) addEvent(obj[i],'click',function(){new show(options);});	
 			else throw new Error("typeError:understard the type of '"+ typeof options +"' in zDialog('type str,type object');");
 		}
 	}
@@ -233,47 +233,3 @@ btnCancelText:取消按钮文字	         type取值  2  时生效
 	zDialog.start=zDialog.prototype.start;
 	window.$z=zDialog;
 }(window));
-window.onload=function(){
-	var a=321;
-	$z.init({
-		boxStyle:{
-			backgroundColor:'red',
-			width:'100px'
-		},
-		coverStyle:{
-			fontSize:'18px'
-		}
-	}).start('.text1',{
-		type:1,
-		z:'人们说',
-		tText:'我们都有一个家。',
-		btnSureText:'同意',
-		zStyle:{
-			textAlign:'center',
-			color:'red'
-		},
-		sureFun:function(){
-			console.log('zonybir\'s love.');
-		},
-		t:true,
-		clickCoverHide:true
-	});
-	$z('.text2',{
-		type:2,
-		z:'我们都还在这里?',
-		tText:'提示2',
-		tStyle:{
-			textAlign:'center'
-		},
-		sureFun:function(){
-			console.log('你选择的是的，对不起，回答错误。');
-			a++;
-		},
-		cancelFun:function(){
-			console.log('你选择的不是，恭喜你答对了。');
-		},
-		btnSureText:'是的',
-		btnCancelText:'不是'
-	})
-	//$z('.text2',{z:'fefefefefwefwfwfewfwefwefwfe'});
-}
