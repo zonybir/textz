@@ -4,12 +4,12 @@ position:  left   top  right bottom center  {left:X,top:X}
 fixed:true  false 默认true
 t: 若有此属性且值为false  则不带标题 此时tStyle属性无效
 tStyle:无t属性或者t属性为true 时 生效   设置标题样式 eg  tStyle{coloe:red,fontSize:'18px',backgroundColor:#fff}
-z:弹框内容
-type: 1 带确认按钮 （重要性提示） 2 无确认按钮 空白点击隐藏（不重要提示性用）  3带确定与取消 返回true false(用户选择性用) 
-border:'1px solid #ccc' 弹出框的边框
-box-show:弹出框的阴影
-box-bgColor:弹出框背景色
-btnSureText:弹出框 确定按钮文字
+z:弹框内容  必有属性
+zStyle:弹框 文字 box 的样式。    eg  zStyle{coloe:red,fontSize:'18px',backgroundColor:#fff}
+type: 1 带确认按钮 （重要性提示） 2带确定与取消 返回true false(用户选择性用)   3无任何按钮 空白点击隐藏（不重要提示性用）
+
+btnSureText:弹出框 确定按钮文字      type取值  1   、2 时生效
+btnCancelText:取消按钮文字	         type取值  2  时生效
 */
 (function(window){
 	var d=document,
@@ -46,7 +46,8 @@ btnSureText:弹出框 确定按钮文字
 			backgroundColor:'#fff',
 			padding:'10px 15px',
 			maxHeight:'221px',
-			overflow:'auto'
+			overflow:'auto',
+			minHeight:'50px'
 			},
 		footerStyle:{
 			padding:'5px 5px',
@@ -83,10 +84,6 @@ btnSureText:弹出框 确定按钮文字
 		else if (target.attachEvent) target.attachEvent('on'+type,function(evet){return handler.call(target,event);})
 		else {z.innerHTML='浏览器版本过低，请升级你的浏览器方可正常使用。谢谢！';}
 	}
-	function  hasPrototype(obj){
-		if(typeof obj !== 'underfind') return true;
-		else return false;
-	}
 	function close(){cover.parentNode.removeChild(cover);removeEvent();}
 	function stop(event){
 		var e=event || window.event;
@@ -114,7 +111,19 @@ btnSureText:弹出框 确定按钮文字
 			var _t=this;
 			if (_t.options.t == false || _t.options.t == 'false'){
 				_t.title.parentNode.removeChild(_t.title);
-			}else if( typeof _t.options.tStyle === 'object') _t.setStyle(_t.t,_t.options.tStyle);
+			}else {
+				if( typeof _t.options.tStyle === 'object')_t.setStyle(_t.title,_t.options.tStyle);
+				if(_t.options.tText) _t.title.innerHTML=_t.options.tText;
+				else _t.title.innerHTML='提示';
+			}
+		},
+		setZ:function(){
+			var _t=this;
+			if(typeof _t.options.z !== 'string') throw new Error('thr dialog\'s content don\'t allow empty.please add the prototype of z.');
+			else{
+				if (typeof _t.options.zStyle === 'object') _t.setStyle(_t.z,_t.options.zStyle);
+				_t.z.innerHTML=_t.options.z;
+			}
 		},
 		setBtn:function(){
 			if (typeof this.options.type !== 'underfind'){
@@ -126,19 +135,22 @@ btnSureText:弹出框 确定按钮文字
 					case 1:{
 						this.footer.appendChild(this.btnSure);
 						if(this.options.btnSureText) this.btnSure.innerHTML=this.options.btnSureText;
+						else this.btnSure.innerHTML='确定';
 						break;
 					}
 					case 2:{
 						this.footer.appendChild(this.btnCancel);
 						if(this.options.btnCancelText) this.btnCancel.innerHTML=this.options.btnCancelText;
+						else this.btnCancel.innerHTML='取消';
 						this.footer.appendChild(this.btnSure);
 						if(this.options.btnSureText) this.btnSure.innerHTML=this.options.btnSureText;
+						else this.btnSure.innerHTML='确定';
 						break;
 					}
 					default:
 						break;
 				}
-			}
+			}else {}
 		},
 		overallStyle:function(){
 			var _t=this;
@@ -153,16 +165,16 @@ btnSureText:弹出框 确定按钮文字
 		setStyle:function(ele,obj){for(var i in obj)ele.style[i]=obj[i];},
 		show:function(){
 			this.cloneAndApeendNode();
-			this.setT();
-			this.setBtn();
 			this.overallStyle();
+			this.setT();
+			this.setZ();
+			this.setBtn();
+			
 			cover.appendChild(this.box);
 			d.querySelectorAll('body')[0].appendChild(cover);
 		}
 	}	
-	function zDialog(str,options){
-		zDialog.prototype.start(str,options);
-	};
+	function zDialog(str,options){zDialog.prototype.start(str,options);};
 	zDialog.prototype.start=function(str,options){
 		if(typeof str !== 'string'){
 			throw new Error("typeError:understard the type of '"+ typeof str +"' in zDialog('type str,type object');");
@@ -173,13 +185,13 @@ btnSureText:弹出框 确定按钮文字
 		}
 	}
 	zDialog.prototype.initStyle=function(options){
-		if (hasPrototype(options.coverStyle)) for(var i in options.coverStyle) dialog.coverStyle[i]=options.coverStyle[i];
-		if (hasPrototype(options.boxStyle)) for(var i in options.boxStyle) dialog.boxStyle[i]=options.boxStyle[i];
-		if (hasPrototype(options.titleStyle)) for(var i in options.titleStyle) dialog.titleStyle[i]=options.titleStyle[i];
-		if (hasPrototype(options.zStyle)) for(var i in options.zStyle) dialog.zStyle[i]=options.zStyle[i];
-		if (hasPrototype(options.footerStyle)) for(var i in options.footerStyle) dialog.footerStyle[i]=options.footerStyle[i];
-		if(hasPrototype(options.btnSureStyle)) for(var i in options.btnSureStyle) dialog.btnSureStyle[i]=options.btnSureStyle[i];
-		if(hasPrototype(options.btnCancelStyle)) for(var i in options.btnCancelStyle) dialog.btnCancelStyle[i]=options.btnCancelStyle[i];
+		if (options.coverStyle) for(var i in options.coverStyle) dialog.coverStyle[i]=options.coverStyle[i];
+		if (options.boxStyle) for(var i in options.boxStyle) dialog.boxStyle[i]=options.boxStyle[i];
+		if (options.titleStyle) for(var i in options.titleStyle) dialog.titleStyle[i]=options.titleStyle[i];
+		if (options.zStyle) for(var i in options.zStyle) dialog.zStyle[i]=options.zStyle[i];
+		if (options.footerStyle) for(var i in options.footerStyle) dialog.footerStyle[i]=options.footerStyle[i];
+		if(options.btnSureStyle) for(var i in options.btnSureStyle) dialog.btnSureStyle[i]=options.btnSureStyle[i];
+		if(options.btnCancelStyle) for(var i in options.btnCancelStyle) dialog.btnCancelStyle[i]=options.btnCancelStyle[i];
 		return this;
 	};
 	zDialog.init=zDialog.prototype.initStyle;
@@ -193,18 +205,8 @@ btnSureText:弹出框 确定按钮文字
 	}
 	function removeEvent(){
 		document.removeEventListener('click',clickhandler,false);
-		document.removeEventListener('click',btnCancel,false);
-		
+		document.removeEventListener('click',btnCancel,false);		
 		document.removeEventListener('click',box,false);
-	}
-	function overallStyle(){
-		setStyle(cover,dialog.coverStyle);
-		setStyle(box,dialog.boxStyle);
-		setStyle(title,dialog.titleStyle);
-		setStyle(z,dialog.zStyle);
-		setStyle(footer,dialog.footerStyle);
-		setStyle(btnSure,dialog.btnSureStyle);
-		setStyle(btnCancel,dialog.btnCancelStyle);
 	}
 	window.$z=zDialog;
 }(window));
@@ -217,6 +219,15 @@ window.onload=function(){
 		coverStyle:{
 			fontSize:'18px'
 		}
-	}).start('.text1',{z:'shishishishi'});
+	}).start('.text1',{
+		type:1,
+		z:'人们说',
+		tText:'我们都有一个家。',
+		btnSureText:'同意',
+		zStyle:{
+			textAlign:'center',
+			color:'red'
+		}
+	});
 	//$z('.text2',{z:'fefefefefwefwfwfewfwefwefwfe'});
 }
