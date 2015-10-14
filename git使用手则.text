@@ -86,3 +86,19 @@ git 版本回退
 
   git reflog 查看本地操作日志  
   git reset --hard HEAD@{N}   本地commit 退回到指定N的位置.
+  
+  
+ 无意或失误的将代码更新写于 develop 或者master上时   移动修改的代码到新建分支
+ 
+ git stash list 
+ git stash
+ git checkout -b new-branch
+ git stash pop
+ git add .
+ git commit -m XXX
+ git checkoukt develop/master
+ git pull
+ git checkout new-branch
+ git rebase develop/master
+ 
+ over.
